@@ -62,6 +62,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+CORS_ORIGIN_WHITELIST = ["http://localhost:3000"]
+CORS_ALLOW_ALL_ORIGINS = True
+
 ROOT_URLCONF = 'server.urls'
 
 TEMPLATES = [
@@ -90,7 +93,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'CHARSET': 'utf8',
+        'COLLATION': 'utf8_general_ci',
+    },
+    'OPTIONS': {'charset': 'utf8mb4'},
 }
 
 
@@ -143,7 +149,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # GraphQL
 
 GRAPHENE = {
-    "SCHEMA": "twitter.schema.schema",
+    "SCHEMA": "server.schema.schema",
     "MIDDLEWARE": [
         "graphql_jwt.middleware.JSONWebTokenMiddleware",
     ],
@@ -179,3 +185,14 @@ GRAPHQL_AUTH = {
         "followers": ["exact"],
     },
 }
+
+
+AUTH_USER_MODEL = "users.User"
+
+
+EMAIL_HOST = os.environ.get("EMAIL_HOST")
+EMAIL_PORT = os.environ.get("EMAIL_PORT")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_USE_SSL = os.environ.get("EMAIL_USE_SSL", "").lower() in ("true", "1", "t")
+DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL")
